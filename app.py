@@ -25,12 +25,12 @@ CORS(app)  # This will enable CORS for all routes
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 APP_API_KEY = os.getenv("APP_API_KEY", GROQ_API_KEY)  # Set default if not in env
-
+DEFAULT_MODEL = "llama-3.1-8b-instant"
 
 def check_api_key():
     api_key = request.headers.get("api-key") or request.headers.get("Api-Key")
-    if api_key != APP_API_KEY:
-        return jsonify({"error": "Invalid or missing API key"}), 401
+    if not api_key or api_key.strip() == "":
+        return jsonify({"error": "Invalid or missing API key."}), 401
     return None
 
 
@@ -46,10 +46,13 @@ def create_chat_completion():
         return error_response
 
     data = request.get_json(force=True)
-
+    model = data["model"]
+    if not model or model.strip() == "":
+        model = DEFAULT_MODEL
+        
     groq_payload = {
         "messages": data["messages"],
-        "model": "llama-3.3-70b-versatile"        
+        "model": model        
     }
 
     try:
@@ -96,7 +99,7 @@ def create_chat_completion():
                 "id": groq_response["id"],
                 "object": "chat.completion",
                 "created": groq_response["created"],
-                "model": "llama3-8b-8192",
+                "model": model,
                 "choices": choices,
                 "usage": simplified_usage,
             }
