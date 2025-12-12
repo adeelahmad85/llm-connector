@@ -30,7 +30,7 @@ DEFAULT_MODEL = "llama-3.1-8b-instant"
 def check_api_key():
     api_key = request.headers.get("api-key") or request.headers.get("Api-Key")
     if not api_key or api_key.strip() == "":
-        return jsonify({"error": "Invalid or missing API key."}), 401
+        return jsonify({"error": "Invalid or missing API key..."}), 401
     return None
 
 
