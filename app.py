@@ -25,7 +25,7 @@ CORS(app)  # This will enable CORS for all routes
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 APP_API_KEY = os.getenv("APP_API_KEY", GROQ_API_KEY)  # Set default if not in env
-DEFAULT_MODEL = "llama-3.1-8b-instant"
+DEFAULT_MODEL = "llama-3.3-70b-versatile" #"llama-3.1-8b-instant"
 
 def check_api_key():
     api_key = request.headers.get("api-key") or request.headers.get("Api-Key")
